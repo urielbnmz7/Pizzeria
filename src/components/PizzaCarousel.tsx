@@ -2,14 +2,7 @@
 
 import { useState } from "react";
 import { pizzas } from "@/lib/pizzas";
-
-const cardBg: Record<string, string> = {
-  hawaiana: "from-yellow-300 via-orange-300 to-amber-400",
-  mexicana: "from-red-400 via-orange-400 to-red-500",
-  pepperoni: "from-red-300 via-rose-400 to-red-500",
-  alpastor: "from-orange-300 via-amber-400 to-orange-500",
-  mixta: "from-orange-200 via-yellow-300 to-orange-400",
-};
+import PizzaImage from "./PizzaImage";
 
 export default function PizzaCarousel() {
   const [active, setActive] = useState(0);
@@ -18,36 +11,52 @@ export default function PizzaCarousel() {
   const prev = () => setActive((i) => (i - 1 + total) % total);
   const next = () => setActive((i) => (i + 1) % total);
 
-  const leftIdx = (active - 1 + total) % total;
+  const leftIdx  = (active - 1 + total) % total;
   const rightIdx = (active + 1) % total;
 
+  const touchStartX = useState(0);
+  const handleTouchStart = (e: React.TouchEvent) => touchStartX[1](e.touches[0].clientX);
+  const handleTouchEnd   = (e: React.TouchEvent) => {
+    const diff = touchStartX[0] - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) diff > 0 ? next() : prev();
+  };
+
   return (
-    <div className="w-full flex flex-col items-center gap-10 select-none">
-
+    <div
+      className="w-full flex flex-col items-center gap-8 select-none"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
       {/* ── CARRUSEL ── */}
-      <div className="relative w-full max-w-5xl h-[440px] flex items-center justify-center px-4">
+      <div className="relative w-full max-w-5xl h-[640px] md:h-[720px] flex items-end justify-center px-6 pb-0">
 
-        {/* Carta IZQUIERDA */}
+        {/* Slot IZQUIERDA — solo desktop */}
         <button
           onClick={prev}
-          className="absolute left-0 z-10 w-[28%] h-[360px] rounded-2xl overflow-hidden opacity-50 hover:opacity-70 transition-all duration-300 cursor-pointer shadow-md"
           aria-label="Pizza anterior"
+          className="hidden md:flex flex-col items-center gap-3 absolute left-4 bottom-0 w-[25%] opacity-50 hover:opacity-70 transition-opacity duration-200 cursor-pointer"
         >
-          <Card pizza={pizzas[leftIdx]} active={false} />
+          <PizzaImage src={pizzas[leftIdx].image} alt={pizzas[leftIdx].name} size="md" />
+          <MiniPill name={pizzas[leftIdx].name} />
         </button>
 
-        {/* Carta CENTRAL */}
-        <div className="relative z-20 w-[44%] h-[440px] rounded-2xl overflow-hidden shadow-xl shadow-orange-200 transition-all duration-300">
-          <Card pizza={pizzas[active]} active={true} />
+        {/* Slot CENTRAL */}
+        <div className="relative flex flex-col items-center gap-5 w-full md:w-[42%] z-20">
+          {/* Pizza flotante */}
+          <PizzaImage src={pizzas[active].image} alt={pizzas[active].name} size="hero" />
+
+          {/* Info card separada */}
+          <InfoCard pizza={pizzas[active]} />
         </div>
 
-        {/* Carta DERECHA */}
+        {/* Slot DERECHA — solo desktop */}
         <button
           onClick={next}
-          className="absolute right-0 z-10 w-[28%] h-[360px] rounded-2xl overflow-hidden opacity-50 hover:opacity-70 transition-all duration-300 cursor-pointer shadow-md"
           aria-label="Pizza siguiente"
+          className="hidden md:flex flex-col items-center gap-3 absolute right-4 bottom-0 w-[25%] opacity-50 hover:opacity-70 transition-opacity duration-200 cursor-pointer"
         >
-          <Card pizza={pizzas[rightIdx]} active={false} />
+          <PizzaImage src={pizzas[rightIdx].image} alt={pizzas[rightIdx].name} size="md" />
+          <MiniPill name={pizzas[rightIdx].name} />
         </button>
       </div>
 
@@ -55,7 +64,8 @@ export default function PizzaCarousel() {
       <div className="flex items-center gap-5">
         <button
           onClick={prev}
-          className="w-11 h-11 rounded-full border-2 border-orange-200 bg-white flex items-center justify-center text-orange-400 hover:border-orange-400 hover:text-orange-500 transition-all duration-200 shadow-sm"
+          className="w-11 h-11 rounded-full flex items-center justify-center text-white/50 hover:text-white transition-all duration-200"
+          style={{ background: "#292524", border: "1px solid #3a3330" }}
           aria-label="Anterior"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -69,18 +79,20 @@ export default function PizzaCarousel() {
               key={i}
               onClick={() => setActive(i)}
               aria-label={`Pizza ${i + 1}`}
-              className={`rounded-full transition-all duration-300 ${
-                i === active
-                  ? "w-8 h-2.5 bg-orange-500"
-                  : "w-2.5 h-2.5 bg-orange-200 hover:bg-orange-300"
-              }`}
+              className="rounded-full transition-all duration-300"
+              style={{
+                width: i === active ? "2rem" : "0.625rem",
+                height: "0.625rem",
+                background: i === active ? "#D97706" : "#3a3330",
+              }}
             />
           ))}
         </div>
 
         <button
           onClick={next}
-          className="w-11 h-11 rounded-full border-2 border-orange-200 bg-white flex items-center justify-center text-orange-400 hover:border-orange-400 hover:text-orange-500 transition-all duration-200 shadow-sm"
+          className="w-11 h-11 rounded-full flex items-center justify-center text-white/50 hover:text-white transition-all duration-200"
+          style={{ background: "#292524", border: "1px solid #3a3330" }}
           aria-label="Siguiente"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -92,59 +104,46 @@ export default function PizzaCarousel() {
   );
 }
 
-function Card({ pizza, active }: { pizza: (typeof pizzas)[0]; active: boolean }) {
-  const bg = cardBg[pizza.id] ?? "from-orange-200 to-amber-300";
-
+/* ── Info card — elemento independiente ── */
+function InfoCard({ pizza }: { pizza: (typeof pizzas)[0] }) {
   return (
-    <div className={`relative w-full h-full bg-gradient-to-br ${bg} flex flex-col justify-end`}>
-
-      {/* Badge especialidad */}
+    <div className="w-full rounded-2xl px-5 py-4" style={{ background: "#292524", border: "1px solid #3a3330" }}>
       {pizza.isSpecial && (
-        <div className="absolute top-4 right-4 bg-white/80 backdrop-blur-sm text-orange-600 text-xs font-bold px-3 py-1 rounded-full shadow-sm uppercase tracking-wide">
-          ⭐ Especialidad
-        </div>
-      )}
-
-      {/* Emoji central */}
-      <div className="absolute inset-0 flex items-center justify-center pb-6">
-        <span className={`transition-all duration-300 drop-shadow-md ${active ? "text-[100px]" : "text-[65px]"}`}>
-          {pizza.emoji}
+        <span className="inline-block text-xs font-bold px-3 py-0.5 rounded-full uppercase tracking-wide mb-2" style={{ background: "#D97706", color: "#1C1917" }}>
+          ⭐ La Especialidad
         </span>
-      </div>
-
-      {/* Overlay blanco inferior */}
-      <div className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-white via-white/90 to-transparent" />
-
-      {/* Contenido */}
-      <div className="relative z-10 p-5 flex flex-col gap-1.5">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-orange-100 border border-orange-200 flex items-center justify-center text-base shrink-0">
-            🍕
-          </div>
-          <h3 className="text-gray-800 font-bold text-lg leading-tight">{pizza.name}</h3>
+      )}
+      <div className="flex items-start justify-between gap-3 mb-1">
+        <h3 className="text-white font-bold text-xl leading-tight">{pizza.name}</h3>
+        <div className="flex flex-col items-end shrink-0">
+          {pizza.startingAt && (
+            <span className="text-white/40 text-xs leading-none mb-0.5">desde</span>
+          )}
+          <span className="text-xl font-extrabold leading-tight" style={{ color: "#D97706" }}>
+            ${pizza.price}
+            <span className="text-xs font-normal text-white/40 ml-1">USD</span>
+          </span>
         </div>
-
-        {active && (
-          <p className="text-gray-500 text-sm leading-relaxed line-clamp-2">
-            {pizza.description}
-          </p>
-        )}
-
-        {active && (
-          <div className="flex items-center justify-between mt-2 pt-2 border-t border-orange-100">
-            <span className="text-2xl font-extrabold text-orange-500">
-              ${pizza.price}
-              <span className="text-sm font-normal text-gray-400 ml-1">MXN</span>
-            </span>
-            <span className="flex items-center gap-1 text-sm font-semibold text-orange-500 bg-orange-50 border border-orange-200 px-3 py-1.5 rounded-full hover:bg-orange-100 transition-colors cursor-pointer">
-              Ver pizza
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-              </svg>
-            </span>
-          </div>
-        )}
       </div>
+      <p className="text-white/40 text-sm line-clamp-1 mb-3">{pizza.description}</p>
+      <button
+        className="w-full py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 active:scale-95 flex items-center justify-center gap-1.5"
+        style={{ background: "#D97706", color: "#1C1917" }}
+      >
+        Ver pizza
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+    </div>
+  );
+}
+
+/* ── Mini pill — para cards laterales ── */
+function MiniPill({ name }: { name: string }) {
+  return (
+    <div className="w-full rounded-xl px-4 py-2 text-center" style={{ background: "#292524", border: "1px solid #3a3330" }}>
+      <p className="text-white/50 font-semibold text-xs truncate">{name}</p>
     </div>
   );
 }
