@@ -42,18 +42,38 @@ export default function PizzaCarousel() {
 
         {/* Pizza — ocupa todo el espacio disponible */}
         <div className="flex-1 relative min-h-0">
-          <Image
-            src={pizzas[active].image}
-            alt={pizzas[active].name}
-            fill
-            className="object-contain"
+          <style>{`
+            @keyframes spin-slow {
+              from { transform: rotate(0deg); }
+              to   { transform: rotate(360deg); }
+            }
+          `}</style>
+          {/* Brillo estático */}
+          <div
+            className="absolute inset-0 pointer-events-none"
             style={{
-              filter:
-                "drop-shadow(0 30px 60px rgba(217,119,6,0.45)) drop-shadow(0 0px 30px rgba(217,119,6,0.2))",
+              background: "radial-gradient(circle, rgba(217,119,6,0.35) 0%, rgba(217,119,6,0.1) 50%, transparent 70%)",
             }}
-            sizes="90vw"
-            priority
           />
+          {/* Pizza girando — eje siempre en el centro exacto */}
+          <div
+            className="absolute inset-0 flex items-center justify-center"
+            style={{
+              animation: "spin-slow 90s linear infinite",
+              transformOrigin: "50% 50%",
+              borderRadius: "50%",
+              overflow: "hidden",
+            }}
+          >
+            <Image
+              src={pizzas[active].image}
+              alt={pizzas[active].name}
+              fill
+              className="object-contain"
+              sizes="90vw"
+              priority
+            />
+          </div>
         </div>
 
         {/* Info card */}

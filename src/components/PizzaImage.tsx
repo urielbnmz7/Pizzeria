@@ -15,17 +15,47 @@ const sizes = {
 
 export default function PizzaImage({ src, alt, size = "hero" }: Props) {
   const s = sizes[size];
+  const isHero = size === "hero";
 
   return (
-    <div className={`relative ${s.tailwind} shrink-0`}>
-      <Image
-        src={src}
-        alt={alt}
-        fill
-        className="object-contain"
-        style={{ filter: "drop-shadow(0 30px 60px rgba(217,119,6,0.45)) drop-shadow(0 0px 30px rgba(217,119,6,0.2))" }}
-        sizes={`${s.px}px`}
-      />
+    <div className={`relative ${s.tailwind} shrink-0 flex items-center justify-center`}>
+      {isHero && (
+        <>
+          <style>{`
+            @keyframes spin-slow {
+              from { transform: rotate(0deg); }
+              to   { transform: rotate(360deg); }
+            }
+          `}</style>
+          {/* Brillo estático — no gira */}
+          <div
+            className="absolute inset-0 rounded-full pointer-events-none"
+            style={{
+              background: "radial-gradient(circle, rgba(217,119,6,0.35) 0%, rgba(217,119,6,0.1) 50%, transparent 70%)",
+              transform: "scale(1.1)",
+            }}
+          />
+        </>
+      )}
+
+      {/* Círculo que gira — eje siempre en el centro exacto */}
+      <div
+        className="absolute inset-0 flex items-center justify-center"
+        style={isHero ? {
+          animation: "spin-slow 90s linear infinite",
+          transformOrigin: "50% 50%",
+          borderRadius: "50%",
+          overflow: "hidden",
+        } : undefined}
+      >
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          className="object-contain"
+          sizes={`${s.px}px`}
+        />
+      </div>
     </div>
   );
 }
