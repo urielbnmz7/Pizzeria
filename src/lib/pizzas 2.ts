@@ -3,9 +3,7 @@ export type Pizza = {
   name: string;
   description: string;
   price: number;
-  startingAt?: boolean;
   emoji: string;
-  image: string;
   isSpecial?: boolean;
   ingredients: string[];
 };
@@ -16,9 +14,8 @@ export const pizzas: Pizza[] = [
     name: "Pizza Hawaiana",
     description:
       "El clásico dulce-salado que todos aman. Una combinación perfecta de sabores tropicales.",
-    price: 20,
+    price: 199,
     emoji: "🍍",
-    image: "/imagenes/pizzas/Hawaina.png",
     ingredients: ["Salsa de tomate", "Queso mozzarella", "Jamón", "Piña"],
   },
   {
@@ -26,17 +23,16 @@ export const pizzas: Pizza[] = [
     name: "Pizza Mexicana",
     description:
       "Nuestra creación estrella. Una explosión de sabores picantes y ahumados que te llevarán directo a México.",
-    price: 25,
+    price: 229,
     emoji: "🌶️",
-    image: "/imagenes/pizzas/mexicana.png",
     isSpecial: true,
     ingredients: [
-      "Puré de tomate",
-      "Queso mozzarella",
-      "Chorizo de puerco",
-      "Jamón",
-      "Cebolla",
-      "Chile jalapeño",
+      "Salsa roja especial",
+      "Queso Oaxaca",
+      "Jalapeños",
+      "Chorizo",
+      "Cebolla morada",
+      "Cilantro",
     ],
   },
   {
@@ -44,9 +40,8 @@ export const pizzas: Pizza[] = [
     name: "Pizza Pepperoni",
     description:
       "El favorito de siempre. Generosas rodajas de pepperoni sobre una cama de queso derretido.",
-    price: 20,
+    price: 209,
     emoji: "🍕",
-    image: "/imagenes/pizzas/Peperoni.png",
     ingredients: [
       "Salsa de tomate",
       "Queso mozzarella",
@@ -58,17 +53,15 @@ export const pizzas: Pizza[] = [
     name: "Pizza Al Pastor",
     description:
       "La fusión perfecta entre la taquería y la pizzería. Sabor auténtico en cada rebanada.",
-    price: 27,
+    price: 219,
     emoji: "🥩",
-    image: "/imagenes/pizzas/Pastor.png",
     ingredients: [
-      "Puré de tomate",
+      "Salsa al pastor",
       "Queso mozzarella",
-      "Carne al pastor de puerco",
-      "Jamón",
+      "Carne al pastor",
       "Piña",
       "Cebolla",
-      "Chile jalapeño",
+      "Cilantro",
     ],
   },
   {
@@ -76,12 +69,16 @@ export const pizzas: Pizza[] = [
     name: "Pizza Mixta",
     description:
       "Para los indecisos — lo mejor de todos los mundos en una sola pizza.",
-    price: 25,
-    startingAt: true,
+    price: 239,
     emoji: "🎉",
-    image: "/imagenes/pizzas/Mixta.png",
     ingredients: [
-      "¡Tú decides! Elige 2 sabores diferentes y los combinamos en una sola pizza",
+      "Salsa de tomate",
+      "Queso mozzarella",
+      "Pepperoni",
+      "Jamón",
+      "Pimientos",
+      "Champiñones",
+      "Cebolla",
     ],
   },
 ];

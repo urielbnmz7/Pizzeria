@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Menú Digital 🍕 Pizzería",
-  description: "Menú digital — Pizzas artesanales de 16 pulgadas",
+  title: "Pizzas Joss — Menú Digital",
+  description: "Menú digital de Pizzas Joss — Pizzas artesanales de 16 pulgadas",
 };
 
 export default function RootLayout({
