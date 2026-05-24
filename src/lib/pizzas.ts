@@ -18,7 +18,7 @@ export const pizzas: Pizza[] = [
       "El clásico dulce-salado que todos aman. Una combinación perfecta de sabores tropicales.",
     price: 20,
     emoji: "🍍",
-    image: "/imagenes/pizzas/Hawaina.png",
+    image: "/imagenes/pizzas/Hawaina.avif",
     ingredients: ["Salsa de tomate", "Queso mozzarella", "Jamón", "Piña"],
   },
   {
@@ -28,7 +28,7 @@ export const pizzas: Pizza[] = [
       "Nuestra creación estrella. Una explosión de sabores picantes y ahumados que te llevarán directo a México.",
     price: 25,
     emoji: "🌶️",
-    image: "/imagenes/pizzas/mexicana.png",
+    image: "/imagenes/pizzas/mexicana.avif",
     isSpecial: true,
     ingredients: [
       "Puré de tomate",
@@ -46,7 +46,7 @@ export const pizzas: Pizza[] = [
       "El favorito de siempre. Generosas rodajas de pepperoni sobre una cama de queso derretido.",
     price: 20,
     emoji: "🍕",
-    image: "/imagenes/pizzas/Peperoni.png",
+    image: "/imagenes/pizzas/Peperoni.avif",
     ingredients: [
       "Salsa de tomate",
       "Queso mozzarella",
@@ -60,7 +60,7 @@ export const pizzas: Pizza[] = [
       "La fusión perfecta entre la taquería y la pizzería. Sabor auténtico en cada rebanada.",
     price: 27,
     emoji: "🥩",
-    image: "/imagenes/pizzas/Pastor.png",
+    image: "/imagenes/pizzas/Pastor.avif",
     ingredients: [
       "Puré de tomate",
       "Queso mozzarella",
@@ -79,7 +79,7 @@ export const pizzas: Pizza[] = [
     price: 25,
     startingAt: true,
     emoji: "🎉",
-    image: "/imagenes/pizzas/Mixta.png",
+    image: "/imagenes/pizzas/Mixta.avif",
     ingredients: [
       "¡Tú decides! Elige 2 sabores diferentes y los combinamos en una sola pizza",
     ],
