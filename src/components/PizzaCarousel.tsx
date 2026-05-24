@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { pizzas } from "@/lib/pizzas";
 import PizzaImage from "./PizzaImage";
+import PizzaDetailModal from "./PizzaDetailModal";
 
 export default function PizzaCarousel() {
   const [active, setActive] = useState(0);
@@ -14,6 +16,8 @@ export default function PizzaCarousel() {
   const leftIdx  = (active - 1 + total) % total;
   const rightIdx = (active + 1) % total;
 
+  const [modalOpen, setModalOpen] = useState(false);
+
   const touchStartX = useState(0);
   const handleTouchStart = (e: React.TouchEvent) => touchStartX[1](e.touches[0].clientX);
   const handleTouchEnd   = (e: React.TouchEvent) => {
@@ -22,90 +26,97 @@ export default function PizzaCarousel() {
   };
 
   return (
+    <>
+    {modalOpen && (
+      <PizzaDetailModal pizza={pizzas[active]} onClose={() => setModalOpen(false)} />
+    )}
     <div
-      className="w-full flex flex-col items-center gap-8 select-none"
+      className="w-full h-full flex flex-col"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {/* ── CARRUSEL ── */}
-      <div className="relative w-full max-w-5xl h-[640px] md:h-[720px] flex items-end justify-center px-6 pb-0">
+      {/* ════════════════════════════
+          MOBILE — una card fluida
+      ════════════════════════════ */}
+      <div className="flex md:hidden flex-col h-full">
 
-        {/* Slot IZQUIERDA — solo desktop */}
-        <button
-          onClick={prev}
-          aria-label="Pizza anterior"
-          className="hidden md:flex flex-col items-center gap-3 absolute left-4 bottom-0 w-[25%] opacity-50 hover:opacity-70 transition-opacity duration-200 cursor-pointer"
-        >
-          <PizzaImage src={pizzas[leftIdx].image} alt={pizzas[leftIdx].name} size="md" />
-          <MiniPill name={pizzas[leftIdx].name} />
-        </button>
-
-        {/* Slot CENTRAL */}
-        <div className="relative flex flex-col items-center gap-5 w-full md:w-[42%] z-20">
-          {/* Pizza flotante */}
-          <PizzaImage src={pizzas[active].image} alt={pizzas[active].name} size="hero" />
-
-          {/* Info card separada */}
-          <InfoCard pizza={pizzas[active]} />
+        {/* Pizza — ocupa todo el espacio disponible */}
+        <div className="flex-1 relative min-h-0">
+          <Image
+            src={pizzas[active].image}
+            alt={pizzas[active].name}
+            fill
+            className="object-contain"
+            style={{
+              filter:
+                "drop-shadow(0 30px 60px rgba(217,119,6,0.45)) drop-shadow(0 0px 30px rgba(217,119,6,0.2))",
+            }}
+            sizes="90vw"
+            priority
+          />
         </div>
 
-        {/* Slot DERECHA — solo desktop */}
-        <button
-          onClick={next}
-          aria-label="Pizza siguiente"
-          className="hidden md:flex flex-col items-center gap-3 absolute right-4 bottom-0 w-[25%] opacity-50 hover:opacity-70 transition-opacity duration-200 cursor-pointer"
-        >
-          <PizzaImage src={pizzas[rightIdx].image} alt={pizzas[rightIdx].name} size="md" />
-          <MiniPill name={pizzas[rightIdx].name} />
-        </button>
+        {/* Info card */}
+        <div className="shrink-0 pb-2">
+          <InfoCard pizza={pizzas[active]} onOpen={() => setModalOpen(true)} />
+        </div>
+
+        {/* Navegación */}
+        <div className="shrink-0 flex items-center justify-center gap-5 pt-2 pb-1">
+          <NavBtn onClick={prev} dir="left" />
+          <Dots total={total} active={active} onSelect={setActive} />
+          <NavBtn onClick={next} dir="right" />
+        </div>
       </div>
 
-      {/* ── NAVEGACIÓN ── */}
-      <div className="flex items-center gap-5">
-        <button
-          onClick={prev}
-          className="w-11 h-11 rounded-full flex items-center justify-center text-white/50 hover:text-white transition-all duration-200"
-          style={{ background: "#292524", border: "1px solid #3a3330" }}
-          aria-label="Anterior"
-        >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
+      {/* ════════════════════════════
+          DESKTOP — 3 cartas
+      ════════════════════════════ */}
+      <div className="hidden md:flex flex-col h-full">
+        {/* Cards */}
+        <div className="flex-1 relative flex items-end justify-center px-6 min-h-0">
 
-        <div className="flex items-center gap-2">
-          {pizzas.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setActive(i)}
-              aria-label={`Pizza ${i + 1}`}
-              className="rounded-full transition-all duration-300"
-              style={{
-                width: i === active ? "2rem" : "0.625rem",
-                height: "0.625rem",
-                background: i === active ? "#D97706" : "#3a3330",
-              }}
-            />
-          ))}
+          {/* Izquierda */}
+          <button
+            onClick={prev}
+            aria-label="Pizza anterior"
+            className="flex flex-col items-center gap-3 absolute left-4 bottom-0 w-[25%] opacity-50 hover:opacity-70 transition-opacity duration-200 cursor-pointer"
+          >
+            <PizzaImage src={pizzas[leftIdx].image} alt={pizzas[leftIdx].name} size="md" />
+            <MiniPill name={pizzas[leftIdx].name} />
+          </button>
+
+          {/* Central */}
+          <div className="flex flex-col items-center gap-4 w-[42%] z-20">
+            <PizzaImage src={pizzas[active].image} alt={pizzas[active].name} size="hero" />
+            <InfoCard pizza={pizzas[active]} onOpen={() => setModalOpen(true)} />
+          </div>
+
+          {/* Derecha */}
+          <button
+            onClick={next}
+            aria-label="Pizza siguiente"
+            className="flex flex-col items-center gap-3 absolute right-4 bottom-0 w-[25%] opacity-50 hover:opacity-70 transition-opacity duration-200 cursor-pointer"
+          >
+            <PizzaImage src={pizzas[rightIdx].image} alt={pizzas[rightIdx].name} size="md" />
+            <MiniPill name={pizzas[rightIdx].name} />
+          </button>
         </div>
 
-        <button
-          onClick={next}
-          className="w-11 h-11 rounded-full flex items-center justify-center text-white/50 hover:text-white transition-all duration-200"
-          style={{ background: "#292524", border: "1px solid #3a3330" }}
-          aria-label="Siguiente"
-        >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
+        {/* Navegación */}
+        <div className="shrink-0 flex items-center justify-center gap-5 py-5">
+          <NavBtn onClick={prev} dir="left" />
+          <Dots total={total} active={active} onSelect={setActive} />
+          <NavBtn onClick={next} dir="right" />
+        </div>
       </div>
     </div>
+    </>
   );
 }
 
-/* ── Info card — elemento independiente ── */
-function InfoCard({ pizza }: { pizza: (typeof pizzas)[0] }) {
+/* ── Info card ── */
+function InfoCard({ pizza, onOpen }: { pizza: (typeof pizzas)[0]; onOpen: () => void }) {
   return (
     <div className="w-full rounded-2xl px-5 py-4" style={{ background: "#292524", border: "1px solid #3a3330" }}>
       {pizza.isSpecial && (
@@ -125,25 +136,63 @@ function InfoCard({ pizza }: { pizza: (typeof pizzas)[0] }) {
           </span>
         </div>
       </div>
-      <p className="text-white/40 text-sm line-clamp-1 mb-3">{pizza.description}</p>
+      <p className="text-white/50 text-sm leading-relaxed line-clamp-2 mb-3">{pizza.description}</p>
       <button
-        className="w-full py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 active:scale-95 flex items-center justify-center gap-1.5"
+        onClick={onOpen}
+        className="w-full py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 active:scale-95 flex items-center justify-center gap-2"
         style={{ background: "#D97706", color: "#1C1917" }}
       >
-        Ver pizza
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
+        Ver detalles
       </button>
     </div>
   );
 }
 
-/* ── Mini pill — para cards laterales ── */
+/* ── Mini pill desktop ── */
 function MiniPill({ name }: { name: string }) {
   return (
     <div className="w-full rounded-xl px-4 py-2 text-center" style={{ background: "#292524", border: "1px solid #3a3330" }}>
       <p className="text-white/50 font-semibold text-xs truncate">{name}</p>
+    </div>
+  );
+}
+
+/* ── Botones flecha ── */
+function NavBtn({ onClick, dir }: { onClick: () => void; dir: "left" | "right" }) {
+  return (
+    <button
+      onClick={onClick}
+      className="w-11 h-11 rounded-full flex items-center justify-center text-white/50 hover:text-white transition-all duration-200"
+      style={{ background: "#292524", border: "1px solid #3a3330" }}
+      aria-label={dir === "left" ? "Anterior" : "Siguiente"}
+    >
+      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d={dir === "left" ? "M15 19l-7-7 7-7" : "M9 5l7 7-7 7"} />
+      </svg>
+    </button>
+  );
+}
+
+/* ── Dots ── */
+function Dots({ total, active, onSelect }: { total: number; active: number; onSelect: (i: number) => void }) {
+  return (
+    <div className="flex items-center gap-2">
+      {Array.from({ length: total }).map((_, i) => (
+        <button
+          key={i}
+          onClick={() => onSelect(i)}
+          aria-label={`Pizza ${i + 1}`}
+          className="rounded-full transition-all duration-300"
+          style={{
+            width: i === active ? "2rem" : "0.625rem",
+            height: "0.625rem",
+            background: i === active ? "#D97706" : "#3a3330",
+          }}
+        />
+      ))}
     </div>
   );
 }
