@@ -1,6 +1,7 @@
 import { pizzaSize } from "@/lib/pizzas";
 import PizzaCarousel from "@/components/PizzaCarousel";
 import ContactButton from "@/components/ContactButton";
+import PreloadModalImages from "@/components/PreloadModalImages";
 
 export default function Home() {
   return (
@@ -46,6 +47,9 @@ export default function Home() {
 
       {/* ── BOTÓN FLOTANTE CONTACTO ── */}
       <ContactButton />
+
+      {/* Precarga imágenes del modal con baja prioridad, tras cargar el carrusel */}
+      <PreloadModalImages />
     </main>
   );
 }
