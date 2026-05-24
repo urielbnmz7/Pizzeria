@@ -1,0 +1,90 @@
+export type Pizza = {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  emoji: string;
+  isSpecial?: boolean;
+  ingredients: string[];
+};
+
+export const pizzas: Pizza[] = [
+  {
+    id: "hawaiana",
+    name: "Pizza Hawaiana",
+    description:
+      "El clásico dulce-salado que todos aman. Una combinación perfecta de sabores tropicales.",
+    price: 199,
+    emoji: "🍍",
+    ingredients: ["Salsa de tomate", "Queso mozzarella", "Jamón", "Piña"],
+  },
+  {
+    id: "mexicana",
+    name: "Pizza Mexicana",
+    description:
+      "Nuestra creación estrella. Una explosión de sabores picantes y ahumados que te llevarán directo a México.",
+    price: 229,
+    emoji: "🌶️",
+    isSpecial: true,
+    ingredients: [
+      "Salsa roja especial",
+      "Queso Oaxaca",
+      "Jalapeños",
+      "Chorizo",
+      "Cebolla morada",
+      "Cilantro",
+    ],
+  },
+  {
+    id: "pepperoni",
+    name: "Pizza Pepperoni",
+    description:
+      "El favorito de siempre. Generosas rodajas de pepperoni sobre una cama de queso derretido.",
+    price: 209,
+    emoji: "🍕",
+    ingredients: [
+      "Salsa de tomate",
+      "Queso mozzarella",
+      "Pepperoni premium",
+    ],
+  },
+  {
+    id: "alpastor",
+    name: "Pizza Al Pastor",
+    description:
+      "La fusión perfecta entre la taquería y la pizzería. Sabor auténtico en cada rebanada.",
+    price: 219,
+    emoji: "🥩",
+    ingredients: [
+      "Salsa al pastor",
+      "Queso mozzarella",
+      "Carne al pastor",
+      "Piña",
+      "Cebolla",
+      "Cilantro",
+    ],
+  },
+  {
+    id: "mixta",
+    name: "Pizza Mixta",
+    description:
+      "Para los indecisos — lo mejor de todos los mundos en una sola pizza.",
+    price: 239,
+    emoji: "🎉",
+    ingredients: [
+      "Salsa de tomate",
+      "Queso mozzarella",
+      "Pepperoni",
+      "Jamón",
+      "Pimientos",
+      "Champiñones",
+      "Cebolla",
+    ],
+  },
+];
+
+export const pizzaSize = {
+  inches: 16,
+  slices: 8,
+  label: '16" — 8 rebanadas',
+};
