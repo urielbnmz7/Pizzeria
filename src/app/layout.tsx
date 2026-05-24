@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { pizzas } from "@/lib/pizzas";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,6 +28,17 @@ export default function RootLayout({
       lang="es"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        {/* Precarga todas las imágenes de pizzas al inicio */}
+        {pizzas.map((pizza) => (
+          <link
+            key={pizza.id}
+            rel="preload"
+            as="image"
+            href={pizza.image}
+          />
+        ))}
+      </head>
       <body className="min-h-full flex flex-col" style={{ background: "#1C1917" }}>{children}</body>
     </html>
   );

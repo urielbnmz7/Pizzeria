@@ -55,25 +55,31 @@ export default function PizzaCarousel() {
               background: "radial-gradient(circle, rgba(217,119,6,0.35) 0%, rgba(217,119,6,0.1) 50%, transparent 70%)",
             }}
           />
-          {/* Pizza girando — eje siempre en el centro exacto */}
-          <div
-            className="absolute inset-0 flex items-center justify-center"
-            style={{
-              animation: "spin-slow 90s linear infinite",
-              transformOrigin: "50% 50%",
-              borderRadius: "50%",
-              overflow: "hidden",
-            }}
-          >
-            <Image
-              src={pizzas[active].image}
-              alt={pizzas[active].name}
-              fill
-              className="object-contain"
-              sizes="90vw"
-              priority
-            />
-          </div>
+          {/* Todas las pizzas precargadas — solo la activa es visible */}
+          {pizzas.map((pizza, i) => (
+            <div
+              key={pizza.id}
+              className="absolute inset-0 flex items-center justify-center"
+              style={{
+                animation: "spin-slow 90s linear infinite",
+                transformOrigin: "50% 50%",
+                borderRadius: "50%",
+                overflow: "hidden",
+                opacity: i === active ? 1 : 0,
+                transition: "opacity 0.4s ease",
+                pointerEvents: i === active ? "auto" : "none",
+              }}
+            >
+              <Image
+                src={pizza.image}
+                alt={pizza.name}
+                fill
+                className="object-contain"
+                sizes="90vw"
+                priority
+              />
+            </div>
+          ))}
         </div>
 
         {/* Info card */}
