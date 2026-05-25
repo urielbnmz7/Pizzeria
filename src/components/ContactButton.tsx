@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function ContactButton() {
   const [open, setOpen] = useState(false);
@@ -9,11 +9,14 @@ export default function ContactButton() {
   const WHATSAPP = "18019133841";
   const MSG = encodeURIComponent("Hola, me gustaría ordenar una pizza");
 
-  // Android: smsto: con +1 y ?body= · iOS: sms: con &body=
-  const isAndroid = typeof navigator !== "undefined" && /android/i.test(navigator.userAgent);
-  const smsHref = isAndroid
-    ? `smsto:+1${PHONE}?body=${MSG}`
-    : `sms:${PHONE}&body=${MSG}`;
+  // Detectar Android solo en el cliente para evitar errores de SSR
+  const [smsHref, setSmsHref] = useState(`sms:${PHONE}&body=${MSG}`);
+
+  useEffect(() => {
+    if (/android/i.test(navigator.userAgent)) {
+      setSmsHref(`sms:+1${PHONE}?body=${MSG}`);
+    }
+  }, []);
 
   return (
     <div className="fixed bottom-6 right-4 z-40 flex flex-col items-end gap-3 pointer-events-none">
