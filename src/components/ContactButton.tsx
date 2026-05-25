@@ -7,9 +7,14 @@ export default function ContactButton() {
 
   const PHONE = "8016043054";
   const WHATSAPP = "18019133841";
+  const MSG = encodeURIComponent("Hola, me gustaría ordenar una pizza");
+
+  // Android usa ?body= · iOS usa &body=
+  const isAndroid = typeof navigator !== "undefined" && /android/i.test(navigator.userAgent);
+  const smsHref = isAndroid ? `sms:${PHONE}?body=${MSG}` : `sms:${PHONE}&body=${MSG}`;
 
   return (
-    <div className="fixed bottom-6 right-4 z-40 flex flex-col items-end gap-3">
+    <div className="fixed bottom-6 right-4 z-40 flex flex-col items-end gap-3 pointer-events-none">
 
       {/* ── Opciones (aparecen al abrir) ── */}
       <div
@@ -35,7 +40,7 @@ export default function ContactButton() {
 
         {/* WhatsApp */}
         <a
-          href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent("Hola, me gustaría ordenar una pizza")}`}
+          href={`https://wa.me/${WHATSAPP}?text=${MSG}`}
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-2.5 pl-4 pr-3 py-2.5 rounded-full font-semibold text-sm shadow-lg transition-transform active:scale-95"
@@ -53,7 +58,7 @@ export default function ContactButton() {
 
         {/* Mensaje de texto */}
         <a
-          href={PHONE ? `sms:${PHONE}&body=${encodeURIComponent("Hola, me gustaría ordenar una pizza")}` : "#"}
+          href={PHONE ? smsHref : "#"}
           className="flex items-center gap-2.5 pl-4 pr-3 py-2.5 rounded-full font-semibold text-sm shadow-lg transition-transform active:scale-95"
           style={{ background: "#292524", border: "1px solid #3a3330", color: "#fff" }}
           onClick={() => setOpen(false)}
@@ -72,7 +77,7 @@ export default function ContactButton() {
       <button
         onClick={() => setOpen((v) => !v)}
         aria-label="Contactar"
-        className="w-14 h-14 rounded-full flex items-center justify-center shadow-xl transition-all duration-300 active:scale-95"
+        className="w-14 h-14 rounded-full flex items-center justify-center shadow-xl transition-all duration-300 active:scale-95 pointer-events-auto"
         style={{
           background: "#D97706",
           boxShadow: "0 8px 30px rgba(217,119,6,0.45)",
