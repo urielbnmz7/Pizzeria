@@ -80,6 +80,28 @@ export default function PizzaCarousel() {
               />
             </div>
           ))}
+
+          {/* Flechas sobre la imagen */}
+          <button
+            onClick={prev}
+            aria-label="Pizza anterior"
+            className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center z-10"
+            style={{ background: "rgba(28,25,23,0.6)", border: "1px solid #3a3330" }}
+          >
+            <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <button
+            onClick={next}
+            aria-label="Pizza siguiente"
+            className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center z-10"
+            style={{ background: "rgba(28,25,23,0.6)", border: "1px solid #3a3330" }}
+          >
+            <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
         </div>
 
         {/* Info card */}
@@ -87,11 +109,9 @@ export default function PizzaCarousel() {
           <InfoCard pizza={pizzas[active]} onOpen={() => setModalOpen(true)} />
         </div>
 
-        {/* Navegación — pr-20 evita que el botón derecho choque con el botón flotante */}
-        <div className="shrink-0 flex items-center justify-center gap-5 pt-2 pb-1">
-          <NavBtn onClick={prev} dir="left" />
+        {/* Dots centrados */}
+        <div className="shrink-0 flex items-center justify-center pt-2 pb-1">
           <Dots total={total} active={active} onSelect={setActive} />
-          <NavBtn onClick={next} dir="right" />
         </div>
       </div>
 
