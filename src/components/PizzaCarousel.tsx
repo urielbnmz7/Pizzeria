@@ -87,8 +87,8 @@ export default function PizzaCarousel() {
           <InfoCard pizza={pizzas[active]} onOpen={() => setModalOpen(true)} />
         </div>
 
-        {/* Navegación */}
-        <div className="shrink-0 flex items-center justify-center gap-5 pt-2 pb-1">
+        {/* Navegación — pr-20 evita que el botón derecho choque con el botón flotante */}
+        <div className="shrink-0 flex items-center justify-center gap-5 pt-2 pb-1 pr-20">
           <NavBtn onClick={prev} dir="left" />
           <Dots total={total} active={active} onSelect={setActive} />
           <NavBtn onClick={next} dir="right" />
