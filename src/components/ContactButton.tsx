@@ -5,8 +5,8 @@ import { useState, useEffect } from "react";
 export default function ContactButton() {
   const [open, setOpen] = useState(false);
 
-  const PHONE = "8016043054";
-  const WHATSAPP = "18019133841";
+  const PHONE = "8016043057";
+  const WHATSAPP = "18016043054";
   const MSG = encodeURIComponent("Hola, me gustaría ordenar una pizza");
 
   // Detectar Android solo en el cliente para evitar errores de SSR
